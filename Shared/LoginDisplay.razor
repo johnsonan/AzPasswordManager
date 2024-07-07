@@ -1,0 +1,10 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <MudAlert Severity="Severity.Success" Dense=true>Hello, @context.User.Identity?.Name!</MudAlert>
+        <MudIconButton Title="Logout" Href="MicrosoftIdentity/Account/SignOut" Icon="@Icons.Material.Filled.Logout"></MudIconButton>
+    </Authorized>
+    <NotAuthorized>
+        <MudAlert Severity="Severity.Error" Dense=true>Please sign in to continue.</MudAlert>
+        <MudIconButton Title="Login" Href="MicrosoftIdentity/Account/SignIn" Icon="@Icons.Material.Filled.Login"></MudIconButton>
+    </NotAuthorized>
+</AuthorizeView>

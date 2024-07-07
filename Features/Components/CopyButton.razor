@@ -1,0 +1,37 @@
+﻿@using AzPasswordManager.Features.Clipboard
+@using AzPasswordManager.Features.Secrets
+@using MediatR
+@inject ISnackbar SnackbarService
+@inject IMediator Mediator
+
+<MudIconButton OnClick="@(() => CopySecretValue(CopyTextValue))" Icon="@Icons.Material.Filled.ContentCopy" Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" />
+
+@code {
+    [Parameter]
+    public string CopyTextValue { get; set; }
+
+    // Clipboard logic for copying secret
+    private async void CopySecretValue(string secretname)
+    {
+        // Writing to the clipboard may be denied, so you must handle the exception
+        try
+        {
+            AzPasswordManager.Features.Secrets.SecretBundle _secret = await Mediator.Send(new GetSecret.Query
+                {
+                    SecretName = secretname
+                });
+
+            await Mediator.Send(new SetClipboard.Command
+                {
+                    Text = _secret.Value
+                });
+
+            SnackbarService.Add($"{secretname} value copied to clipboard 👍", Severity.Success);
+        }
+        catch
+        {
+            SnackbarService.Add($"Failed to copy {secretname} value to keyboard 👎", Severity.Error);
+        }
+
+    }
+}
